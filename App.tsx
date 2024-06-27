@@ -1,8 +1,8 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
-import Groups from '@screens/Groups/Groups';
 import {ThemeProvider} from 'styled-components';
 import Theme from '@theme/Theme';
+import {Players} from '@screens/Players/Players';
 
 function App(): React.JSX.Element {
   return (
@@ -12,7 +12,7 @@ function App(): React.JSX.Element {
         backgroundColor="transparent"
         translucent
       />
-      <Groups />
+      <Players />
     </ThemeProvider>
   );
 }
