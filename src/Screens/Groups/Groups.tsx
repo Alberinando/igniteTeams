@@ -21,6 +21,7 @@ function Groups(): React.JSX.Element {
         ListEmptyComponent={() => (
           <ListEmpty message={'Que tal Cadastrar a primeira turma?'} />
         )}
+        showsVerticalScrollIndicator={false}
       />
       <Button title="Criar nova turma" />
     </Container>
