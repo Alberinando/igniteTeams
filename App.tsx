@@ -2,7 +2,7 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {ThemeProvider} from 'styled-components';
 import Theme from '@theme/Theme';
-import Groups from '@screens/Groups/Groups';
+import {Routers} from './src/Routes';
 
 function App(): React.JSX.Element {
   return (
@@ -12,7 +12,7 @@ function App(): React.JSX.Element {
         backgroundColor="transparent"
         translucent
       />
-      <Groups />
+      <Routers />
     </ThemeProvider>
   );
 }

@@ -6,9 +6,15 @@ import {Container} from './Styles';
 import {FlatList} from 'react-native';
 import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
+import {useNavigation} from '@react-navigation/native';
 
 function Groups(): React.JSX.Element {
   const [groups, useGrups] = useState<string[]>([]);
+  const navigation = useNavigation();
+
+  function handleNewGroup() {
+    navigation.navigate('new');
+  }
   return (
     <Container>
       <Header />
@@ -19,11 +25,11 @@ function Groups(): React.JSX.Element {
         renderItem={({item}) => <GroupCard title={item} />}
         contentContainerStyle={groups.length === 0 && {flex: 1}}
         ListEmptyComponent={() => (
-          <ListEmpty message={'Que tal Cadastrar a primeira turma?'} />
+          <ListEmpty message={'Que tal cadastrar a primeira turma?'} />
         )}
         showsVerticalScrollIndicator={false}
       />
-      <Button title="Criar nova turma" />
+      <Button title="Criar nova turma" onPress={handleNewGroup} />
     </Container>
   );
 }
