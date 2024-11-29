@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {Header} from '@components/Header/Header';
 import {Highlight} from '@components/Highlight/Highlight';
 import {GroupCard} from '@components/GrupCard/GrupCard';
@@ -6,15 +6,32 @@ import {Container} from './Styles';
 import {FlatList} from 'react-native';
 import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {groupGetAll} from '../../Storange/group/groupGetAll';
 
 function Groups(): React.JSX.Element {
-  const [groups, useGrups] = useState<string[]>([]);
+  const [groups, setGrups] = useState<string[]>([]);
   const navigation = useNavigation();
 
   function handleNewGroup() {
     navigation.navigate('new');
   }
+
+  async function fetchGroups() {
+    try {
+      const data = await groupGetAll();
+      setGrups(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchGroups();
+    }, []),
+  );
+
   return (
     <Container>
       <Header />

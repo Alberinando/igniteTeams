@@ -5,12 +5,18 @@ import {Highlight} from '@components/Highlight/Highlight';
 import {Button} from '@components/Button/Button';
 import {Input} from '@components/Input/Input';
 import {useNavigation} from '@react-navigation/native';
+import {groupCreate} from '../../Storange/group/groupCreate';
 
 export function NewGroup() {
   const [group, setGroup] = useState('');
   const navigation = useNavigation();
-  function handleNew() {
-    navigation.navigate('players', {group});
+  async function handleNew() {
+    try {
+      await groupCreate(group);
+      navigation.navigate('players', {group});
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <Container>
