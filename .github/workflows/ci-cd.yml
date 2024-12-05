@@ -44,7 +44,7 @@ jobs:
           cd android
           ./gradlew assembleRelease
         env:
-          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk
+          JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
