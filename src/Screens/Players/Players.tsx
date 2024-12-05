@@ -20,6 +20,7 @@ import {AppError} from "@utils/AppError.ts";
 import {playerAddByGroup} from "@storage/player/playAddByGroup.ts";
 import {playersGetByGroupsAndTeams} from "@storage/player/playersGetByGroupsAndTeam.ts";
 import {PlayerStorageDTO} from "@storage/player/PlayerStorageDTO.ts";
+import {playerRemoveByGroup} from "@storage/player/playerRemoveByGroup.ts";
 
 type RouteParams = {
   group: string;
@@ -56,6 +57,16 @@ export function Players() {
               console.error(e);
               ToastAndroid.show("Não foi possível adicionar", ToastAndroid.SHORT);
           }
+      }
+  }
+
+  async function handleRemovePlayer(playerName: string) {
+      try {
+          await playerRemoveByGroup(playerName, group);
+          fetchPlayersByTeam();
+      } catch (e) {
+          console.error(e);
+          ToastAndroid.show("Não foi possível remover a pessoa do time selecionado", ToastAndroid.SHORT)
       }
   }
 
@@ -104,7 +115,7 @@ export function Players() {
       <FlatList
         data={players}
         keyExtractor={item => item.name}
-        renderItem={({item}) => <PlayerCard name={item.name} onRemove={() => {}} />}
+        renderItem={({item}) => <PlayerCard name={item.name} onRemove={() => handleRemovePlayer(item.name)} />}
         ListEmptyComponent={() => (
           <ListEmpty message="Não há pessoas nesse time!" />
         )}
