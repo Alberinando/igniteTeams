@@ -6,8 +6,8 @@ import {
   HeaderList,
   NumberOfPlayers,
 } from './Style';
-import React, {useState} from 'react';
-import {FlatList, ToastAndroid} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {FlatList, TextInput, ToastAndroid} from 'react-native';
 import {Highlight} from '@components/Highlight/Highlight';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Input} from '@components/Input/Input';
@@ -17,8 +17,9 @@ import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
 import {useRoute} from '@react-navigation/native';
 import {AppError} from "@utils/AppError.ts";
-import {playerAddByGroup} from "../../Storange/player/playAddByGroup.ts";
-import {playersGetByGroups} from "../../Storange/player/playersGetByGroups.ts";
+import {playerAddByGroup} from "@storage/player/playAddByGroup.ts";
+import {playersGetByGroupsAndTeams} from "@storage/player/playersGetByGroupsAndTeam.ts";
+import {PlayerStorageDTO} from "@storage/player/PlayerStorageDTO.ts";
 
 type RouteParams = {
   group: string;
@@ -27,9 +28,10 @@ type RouteParams = {
 export function Players() {
   const [team, setTeam] = useState('Time A');
   const [newPlayername, setNewPlayer] = useState('');
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const route = useRoute();
   const {group} = route.params as RouteParams;
+  const newPlayerNameInputRef = useRef<TextInput>(null);
 
   async function handleAddPlayer() {
       if (newPlayername.trim().length === 0) {
@@ -43,23 +45,40 @@ export function Players() {
 
       try {
         await playerAddByGroup(newPlayer, group);
-        const player = await playersGetByGroups(group);
+
+          newPlayerNameInputRef.current?.blur();
+            setNewPlayer('');
+            fetchPlayersByTeam();
       } catch (e) {
           if (e instanceof AppError) {
               ToastAndroid.show(e.message, ToastAndroid.SHORT)
           } else {
               console.error(e);
-              ToastAndroid.show("Não foi possível adicionar", ToastAndroid.SHORT)
+              ToastAndroid.show("Não foi possível adicionar", ToastAndroid.SHORT);
           }
       }
   }
+
+  async function fetchPlayersByTeam(){
+      try{
+          const playrsByTeam = await playersGetByGroupsAndTeams(group, team);
+          setPlayers(playrsByTeam)
+      }catch(error){
+          console.error(error);
+          ToastAndroid.show("Não foi possível carregar as pessoas do time selecionado", ToastAndroid.SHORT)
+      }
+  }
+
+  useEffect(() => {
+        fetchPlayersByTeam();
+    }, [team])
 
   return (
     <Container>
       <Header showBackButton />
       <Highlight title={group} subTitle="Separe a galera" />
       <Form>
-        <Input onChangeText={setNewPlayer} placeholder="Nome da pessoa" autoCorrect={false} />
+        <Input inputRef = {newPlayerNameInputRef} onChangeText={setNewPlayer} placeholder="Nome da pessoa" autoCorrect={false} value={newPlayername} onSubmitEditing={handleAddPlayer} returnKeyType="done" />
         <ContainerButton>
           <Icon name="add" size={24} color={'#00875F'} onPress={handleAddPlayer} />
         </ContainerButton>
@@ -84,8 +103,8 @@ export function Players() {
 
       <FlatList
         data={players}
-        keyExtractor={item => item}
-        renderItem={({item}) => <PlayerCard name={item} onRemove={() => {}} />}
+        keyExtractor={item => item.name}
+        renderItem={({item}) => <PlayerCard name={item.name} onRemove={() => {}} />}
         ListEmptyComponent={() => (
           <ListEmpty message="Não há pessoas nesse time!" />
         )}
