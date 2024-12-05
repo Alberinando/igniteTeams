@@ -26,6 +26,10 @@ function Groups(): React.JSX.Element {
     }
   }
 
+  function handleOpenGrup(group: string){
+      navigation.navigate('players', {group})
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchGroups();
@@ -39,7 +43,7 @@ function Groups(): React.JSX.Element {
       <FlatList
         data={groups}
         keyExtractor={item => item}
-        renderItem={({item}) => <GroupCard title={item} />}
+        renderItem={({item}) => <GroupCard title={item} onPress={() => handleOpenGrup(item)} />}
         contentContainerStyle={groups.length === 0 && {flex: 1}}
         ListEmptyComponent={() => (
           <ListEmpty message={'Que tal cadastrar a primeira turma?'} />
