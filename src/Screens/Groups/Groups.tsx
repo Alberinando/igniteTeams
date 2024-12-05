@@ -7,7 +7,7 @@ import {FlatList} from 'react-native';
 import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import {groupGetAll} from '../../Storange/group/groupGetAll';
+import {groupGetAll} from '../../Storage/group/groupGetAll';
 
 function Groups(): React.JSX.Element {
   const [groups, setGrups] = useState<string[]>([]);

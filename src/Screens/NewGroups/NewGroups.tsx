@@ -5,7 +5,7 @@ import {Highlight} from '@components/Highlight/Highlight';
 import {Button} from '@components/Button/Button';
 import {Input} from '@components/Input/Input';
 import {useNavigation} from '@react-navigation/native';
-import {groupCreate} from '../../Storange/group/groupCreate';
+import {groupCreate} from '../../Storage/group/groupCreate';
 import {AppError} from '@utils/AppError.ts';
 import {ToastAndroid} from 'react-native';
 
