@@ -23,6 +23,7 @@ function Groups(): React.JSX.Element {
       setGrups(data);
     } catch (error) {
       console.error(error);
+      ToastAndroid.show('Não foi possível carregar os grupos', ToastAndroid.SHORT);
     }
   }
 
