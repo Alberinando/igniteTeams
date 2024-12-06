@@ -7,7 +7,7 @@ import {
   NumberOfPlayers,
 } from './Style';
 import React, {useState, useEffect, useRef} from 'react';
-import {FlatList, TextInput, ToastAndroid} from 'react-native';
+import {Alert, FlatList, TextInput, ToastAndroid} from 'react-native';
 import {Highlight} from '@components/Highlight/Highlight';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Input} from '@components/Input/Input';
@@ -15,12 +15,13 @@ import {Filter} from '@components/Filter/Filter';
 import {PlayerCard} from '@components/PlayerCard/PlayerCard';
 import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
-import {useRoute} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import {AppError} from "@utils/AppError.ts";
 import {playerAddByGroup} from "@storage/player/playAddByGroup.ts";
 import {playersGetByGroupsAndTeams} from "@storage/player/playersGetByGroupsAndTeam.ts";
 import {PlayerStorageDTO} from "@storage/player/PlayerStorageDTO.ts";
 import {playerRemoveByGroup} from "@storage/player/playerRemoveByGroup.ts";
+import {groupRemoveByName} from "@storage/group/groupRemoveByName.ts";
 
 type RouteParams = {
   group: string;
@@ -31,6 +32,7 @@ export function Players() {
   const [newPlayername, setNewPlayer] = useState('');
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const route = useRoute();
+  const navigation = useNavigation();
   const {group} = route.params as RouteParams;
   const newPlayerNameInputRef = useRef<TextInput>(null);
 
@@ -80,6 +82,27 @@ export function Players() {
       }
   }
 
+  async function groupsRemove(){
+      try{
+          await groupRemoveByName(group);
+          navigation.navigate('groups');
+      } catch (e) {
+          console.error(e);
+          ToastAndroid.show("Não foi possível romover o grupo", ToastAndroid.SHORT)
+      }
+  }
+
+  async function handleGroupsRemove(){
+      Alert.alert('Remover Turma', 'Deseja realmente remover a turma?', [
+          {
+              text: 'Não', style: 'cancel'
+          },
+          {
+              text: 'Sim', onPress: () => groupsRemove
+          }
+      ])
+  }
+
   useEffect(() => {
         fetchPlayersByTeam();
     }, [team])
@@ -126,7 +149,7 @@ export function Players() {
         ]}
       />
 
-      <Button title={'Remover Turma'} type={'SECONDARY'} />
+      <Button title={'Remover Turma'} type={'SECONDARY'} onPress={handleGroupsRemove} />
     </Container>
   );
 }
