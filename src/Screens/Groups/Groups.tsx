@@ -3,7 +3,7 @@ import {Header} from '@components/Header/Header';
 import {Highlight} from '@components/Highlight/Highlight';
 import {GroupCard} from '@components/GrupCard/GrupCard';
 import {Container} from './Styles';
-import {FlatList} from 'react-native';
+import {FlatList, ToastAndroid} from 'react-native';
 import {ListEmpty} from '@components/ListEmpty/ListEmpty';
 import {Button} from '@components/Button/Button';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -23,7 +23,10 @@ function Groups(): React.JSX.Element {
       setGrups(data);
     } catch (error) {
       console.error(error);
-      ToastAndroid.show('Não foi possível carregar os grupos', ToastAndroid.SHORT);
+      ToastAndroid.show(
+        'Não foi possível carregar os grupos',
+        ToastAndroid.SHORT,
+      );
     }
   }
 
