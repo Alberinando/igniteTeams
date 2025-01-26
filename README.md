@@ -1,6 +1,11 @@
 # Ignite Teams React Native
 
->**Versão do React Native CLI**: A versão do projeto atual do React Native não está na nova arquitetura.
+![Capa do Projeto](src/Assets/capa.png)
+
+## Descrição
+
+Organize as pessoas por equipe.
+
 
 ## Para rodar o projeto na sua máquina
 
