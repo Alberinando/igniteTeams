@@ -1,6 +1,6 @@
 # Ignite Teams React Native
 
-![Capa do Projeto](src/Assets/capa.png)
+![Capa do Projeto](src/Assets/Capa.png)
 
 ## Descrição
 
